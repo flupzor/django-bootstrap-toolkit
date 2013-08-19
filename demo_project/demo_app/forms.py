@@ -1,10 +1,11 @@
 from django import forms
 from django.contrib.auth.models import User
-from bootstrap_toolkit.widgets import BootstrapDateInput, BootstrapTextInput
+from bootstrap_toolkit.widgets import BootstrapDateInput, BootstrapTextInput, BootstrapPasswordInput
+
 
 class TestForm(forms.Form):
     date = forms.DateField(
-        widget=BootstrapDateInput(),
+        widget=BootstrapDateInput(format='%m/%d/%y'),
     )
     title = forms.CharField(
         max_length=100,
@@ -70,6 +71,12 @@ class TestForm(forms.Form):
         help_text=u'I am prepended by a P',
         widget=BootstrapTextInput(prepend='P'),
     )
+
+    password = forms.CharField(
+        widget=BootstrapPasswordInput()
+    )
+
+    file = forms.ImageField()
 
     def clean(self):
         cleaned_data = super(TestForm, self).clean()

@@ -13,6 +13,7 @@ if default_date_format:
 
 def javascript_date_format(python_date_format):
     js_date_format = python_date_format.replace(r'%Y', 'yyyy')
+    js_date_format = js_date_format.replace(r'%y', 'yy')
     js_date_format = js_date_format.replace(r'%m', 'mm')
     js_date_format = js_date_format.replace(r'%d', 'dd')
     if '%' in js_date_format:
@@ -83,6 +84,20 @@ class BootstrapDateInput(forms.DateInput):
         'prepend': None,
     }
 
+    def __init__(self, attrs=None, format=None):
+        date_input_attrs = {}
+        if attrs:
+            date_input_attrs.update(attrs)
+        date_format = format
+        if not date_format:
+            date_format = default_date_format
+        date_input_attrs.update({
+            'data-date-format': javascript_date_format(date_format),
+            'data-date-language': get_language(),
+            'data-bootstrap-widget': 'datepicker',
+        })
+        super(BootstrapDateInput, self).__init__(attrs=date_input_attrs, format=date_format)
+
     @property
     def media(self):
         js = (
@@ -104,17 +119,3 @@ class BootstrapDateInput(forms.DateInput):
             )
         }
         return forms.Media(css=css, js=js)
-
-    def render(self, name, value, attrs=None):
-        date_input_attrs = {}
-        if attrs:
-            date_input_attrs.update(attrs)
-        date_format = self.format
-        if not date_format:
-            date_format = default_date_format
-        date_input_attrs.update({
-            'data-date-format': javascript_date_format(date_format),
-            'data-date-language': get_language(),
-            'data-bootstrap-widget': 'datepicker',
-        })
-        return super(BootstrapDateInput, self).render(name, value, attrs=date_input_attrs)

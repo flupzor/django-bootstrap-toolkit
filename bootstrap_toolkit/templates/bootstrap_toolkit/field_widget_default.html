@@ -1,11 +1,8 @@
 {% load bootstrap_toolkit %}
 
 {# Allow overriding prepends and appends at the template-level. #}
-{% with field|bootstrap_prepend as default_prepend %}
-{% with prepend|default:default_prepend as prepend %}
-
-{% with field|bootstrap_append as default_append %}
-{% with append|default:default_append as append %}
+{% with default_prepend=field|bootstrap_prepend  default_append=field|bootstrap_append  %}
+{% with prepend=prepend|default:default_prepend append=append|default:default_append %}
     {% if prepend or append %}<div class="input-group">{% endif %}
     {% spaceless %}
     {% if prepend %}
@@ -22,7 +19,5 @@
     {% endif %}
     {% endspaceless %}
     {% if prepend or append %}</div>{% endif %}
-{% endwith %}
-{% endwith %}
 {% endwith %}
 {% endwith %}
